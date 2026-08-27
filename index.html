@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Segurança em Desenvolvimento — Análise de Exposição</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header>
+        <h1> Análise de Exposição do Visitante</h1>
+        <p>Ferramenta de auditoria para identificar quais dados seu navegador expõe</p>
+        <span class="badge"> Uso autorizado — segurança em desenvolvimento</span>
+    </header>
+
+    <!-- ===== MAIN ===== -->
+    <main>
+
+        <!-- Status -->
+        <div class="status-bar" id="statusBar">
+            <span class="status-dot" id="statusDot"></span>
+            <span id="statusText">Coletando dados do navegador...</span>
+        </div>
+
+        <!-- AVISO -->
+        <div class="alert alert-warning">
+            <span class="alert-icon">!</span>
+            <div>
+                <strong>Propósito educativo / auditoria.</strong> Esta página coleta dados localmente no seu navegador para demonstrar o que um site comum consegue saber sobre você. Nenhum dado é enviado para servidores externos.
+            </div>
+        </div>
+
+        <!-- ===== CARD: INFORMAÇÕES BÁSICAS ===== -->
+        <div class="card">
+            <h2>
+                <span class="icon ip">IP</span>
+                Endereço IP e Conexão
+            </h2>
+            <table class="data-table" id="tableIp"></table>
+        </div>
+
+        <!-- ===== CARD: USER-AGENT & SISTEMA ===== -->
+        <div class="card">
+            <h2>
+                <span class="icon ua">UA</span>
+                Navegador & Sistema
+            </h2>
+            <table class="data-table" id="tableUa"></table>
+        </div>
+
+        <!-- ===== CARD: CABEÇALHOS HTTP ===== -->
+        <div class="card">
+            <h2>
+                <span class="icon header">H</span>
+                Cabeçalhos HTTP da Requisição
+            </h2>
+            <div class="card-subtitle">
+                Estes são os headers que seu navegador enviou para esta página.
+            </div>
+            <table class="data-table" id="tableHeaders"></table>
+        </div>
+
+        <!-- ===== CARD: FINGERPRINT (JavaScript) ===== -->
+        <div class="card">
+            <h2>
+                <span class="icon finger">F</span>
+                Fingerprint do Navegador
+            </h2>
+            <div class="card-subtitle">
+                Dados coletados via JavaScript — usados para identificação única do visitante.
+            </div>
+            <table class="data-table" id="tableFingerprint"></table>
+
+            <div class="hash-section">
+                <div class="hash-label">Hash de fingerprint (combinação dos dados acima):</div>
+                <div class="hash-wrapper">
+                    <code id="fingerprintHash"></code>
+                    <button onclick="copyText('fingerprintHash')" class="btn-small">Copiar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== CARD: ANÁLISE DE RISCO ===== -->
+        <div class="card">
+            <h2>
+                <span class="icon general">R</span>
+                Nível de Exposição
+            </h2>
+            <p class="card-desc">
+                Quanto mais dados únicos seu navegador expõe, mais fácil é criar uma
+                impressão digital (fingerprint) que permite rastrear você entre sites.
+            </p>
+            <div>
+                <div class="risk-labels">
+                    <span>Baixo</span>
+                    <span id="riskValueText">Calculando...</span>
+                    <span>Alto</span>
+                </div>
+                <div class="risk-meter">
+                    <div class="risk-fill" id="riskFill" style="width:0%;"></div>
+                </div>
+                <div class="risk-legend">
+                    <span>8 dados únicos ou menos</span>
+                    <span>12+ dados únicos</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== CARD: DICAS DE SEGURANÇA ===== -->
+        <div class="card">
+            <h2>
+                <span class="icon general">S</span>
+                Como reduzir sua exposição
+            </h2>
+            <ul class="tips-list">
+                <li> Use VPN para mascarar seu IP real</li>
+                <li> Navegador Tor ou Firefox com proteção contra fingerprint</li>
+                <li> Desative WebRTC no navegador (vaza IP real mesmo com VPN)</li>
+                <li> Bloqueie JavaScript de terceiros (uBlock Origin, NoScript)</li>
+                <li> Use extensões como CanvasBlocker para uniformizar fingerprint</li>
+            </ul>
+        </div>
+
+        <!-- ===== CARD: LOG LOCAL ===== -->
+        <div class="card">
+            <h2>
+                <span class="icon general">L</span>
+                Logs Coletados (Sessão Atual)
+            </h2>
+            <div class="card-subtitle">
+                Os dados abaixo representam o que um site malicioso conseguiria coletar de você.
+            </div>
+            <pre id="logOutput">[]</pre>
+            <div class="log-actions">
+                <button onclick="exportLog()" class="btn-primary"> Exportar JSON</button>
+                <button onclick="clearLog()" class="btn-secondary"> Limpar</button>
+                <span id="logCount" class="log-count"></span>
+            </div>
+        </div>
+
+        <div class="alert alert-info">
+            <span class="alert-icon">i</span>
+            <div>
+                <strong>Dica para seu site em desenvolvimento:</strong> Compare os dados acima com as
+                informações que seu site envia ao cliente. Seu site está vazando IP interno,
+                versões de framework, ou headers de debug? Use esta página como referência.
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <p>
+            HackerAI — Ferramenta de auditoria para segurança em desenvolvimento.
+            <br>
+            <a href="#">Como usar este recurso nos seus testes</a>
+        </p>
+    </footer>
+
+    <!-- ===== JAVASCRIPT ===== -->
+    <script src="script.js"></script>
+
+</body>
+</html>
